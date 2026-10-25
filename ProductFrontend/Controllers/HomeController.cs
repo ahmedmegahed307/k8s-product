@@ -12,7 +12,7 @@ namespace ProductFrontend.Controllers
         {
             _logger = logger;
         }
-
+        //test
         public IActionResult Index()
         {
             return View();
