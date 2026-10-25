@@ -1,0 +1,86 @@
+
+name: .NET 8 Docker CI
+
+on:
+  push:
+    branches:
+      - master
+
+  pull_request:
+    branches:
+      - master
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-push:
+    name: Build and Push Docker Images
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout source code
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # 2. Install .NET 8 SDK
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      # 3. Restore API
+      - name: Restore ProductAPI
+        run: dotnet restore ./ProductAPI/ProductAPI.csproj
+
+      # 4. Restore Frontend
+      - name: Restore ProductFrontend
+        run: dotnet restore ./ProductFrontend/ProductFrontend.csproj
+
+      # 5. Build API
+      - name: Build ProductAPI
+        run: dotnet build ./ProductAPI/ProductAPI.csproj --no-restore -c Release
+
+      # 6. Build Frontend
+      - name: Build ProductFrontend
+        run: dotnet build ./ProductFrontend/ProductFrontend.csproj --no-restore -c Release
+
+      # 7. Setup Docker Buildx
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # 8. Login to Docker Hub
+      - name: Login to Docker Hub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 9. Build and Push ProductAPI
+      - name: Build and Push ProductAPI
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./ProductAPI/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: |
+            testdockerahmed/productapi:latest
+            testdockerahmed/productapi:${{ github.sha }}
+          cache-from: type=gha,scope=productapi
+          cache-to: type=gha,mode=max,scope=productapi
+
+      # 10. Build and Push ProductFrontend
+      - name: Build and Push ProductFrontend
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./ProductFrontend/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: |
+            testdockerahmed/productfrontend:latest
+            testdockerahmed/productfrontend:${{ github.sha }}
+          cache-from: type=gha,scope=productfrontend
+          cache-to: type=gha,mode=max,scope=productfrontend
