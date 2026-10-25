@@ -1,0 +1,13 @@
+services:
+  productapi:
+    image: ${DOCKER_REGISTRY-}productapi
+    build:
+      context: .
+      dockerfile: ProductAPI/Dockerfile
+
+  productfrontend:
+    image: ${DOCKER_REGISTRY-}productfrontend
+    build:
+      context: .
+      dockerfile: ProductFrontend/Dockerfile
+
