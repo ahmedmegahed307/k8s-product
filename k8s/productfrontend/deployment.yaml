@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: product-frontend
-          image: testdockerahmed/productfrontend:v3
-          imagePullPolicy: IfNotPresent
+          image: testdockerahmed/productfrontend:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:

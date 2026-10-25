@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: product-api
-          image: testdockerahmed/productapi:v3
-          imagePullPolicy: IfNotPresent
+          image: testdockerahmed/productapi:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
