@@ -2,10 +2,10 @@ services:
   productapi:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=80
+      - ASPNETCORE_HTTP_PORTS=8080
       - ConnectionStrings__ProductConnectionString=Server=host.docker.internal,1433;Database=ProductDB;User Id=productapi_user;Password=${DB_PASSWORD};TrustServerCertificate=True;
     expose:
-      - "80"
+      - "8080"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
@@ -13,10 +13,10 @@ services:
   productfrontend:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=80
-      - ProductApi__BaseUrl=http://productapi/
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ProductApi__BaseUrl=http://productapi:8080/
     ports:
-      - "80:80"
+      - "80:8080"
     depends_on:
       - productapi
     volumes:

@@ -17,12 +17,10 @@ spec:
           image: testdockerahmed/productapi:v3
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 80
+            - containerPort: 8080
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: "Development"
-            - name: ASPNETCORE_HTTP_PORTS
-              value: "80"
             - name: ConnectionStrings__ProductConnectionString
               valueFrom:
                 secretKeyRef:
