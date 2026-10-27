@@ -3,7 +3,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
-      - ConnectionStrings__ProductConnectionString=Server=host.docker.internal,1433;Database=ProductDB;User Id=productapi_user;Password=${DB_PASSWORD};TrustServerCertificate=True;
+      - ConnectionStrings__ProductConnectionString=Server=tcp:aks-db.database.windows.net,1433;Initial Catalog=ProductDB;User ID=dbadmin;Password=Helloworld10!;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
     expose:
       - "8080"
     volumes:
