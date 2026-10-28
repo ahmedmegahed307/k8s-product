@@ -114,10 +114,10 @@ jobs:
           kubectl apply -f ./aks/productfrontend/
 
       - name: Update ProductAPI Image
-        run: kubectl set image deployment/product-api productapi=testdockerahmed/productapi:${{ github.sha }}
+        run: kubectl set image deployment/product-api product-api=testdockerahmed/productapi:${{ github.sha }}
 
       - name: Update ProductFrontend Image
-        run: kubectl set image deployment/product-frontend productfrontend=testdockerahmed/productfrontend:${{ github.sha }}
+        run: kubectl set image deployment/product-frontend product-frontend=testdockerahmed/productfrontend:${{ github.sha }}
 
       - name: Verify API Deployment
         run: kubectl rollout status deployment/product-api --timeout=300s
